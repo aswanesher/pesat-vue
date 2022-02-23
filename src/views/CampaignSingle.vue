@@ -44,6 +44,18 @@
                 <div class="col-lg-4">
                     <div class="portfolio-info">
                         <h3>Bagikan Artikel</h3>
+                        <ShareNetwork
+                            v-for="network in networks"
+                            :network="network.network"
+                            :key="network.network"
+                            :url="'http://pejuangsedekah.id/campaign/'+campaignDetail.campaign_slug"
+                            :title="title"
+                            :description="campaignDetail.campaign_name"
+                            class="btn btn-warning m-1"
+                        >
+                            <i :class="network.icon"></i>
+                            <span class="m-2">{{ network.name }}</span>
+                        </ShareNetwork>
                     </div>
                     <RelatedCampaign/>
                 </div>
@@ -72,15 +84,17 @@ export default {
     },
     data(){
         return {
-            campaignDetail: [],
+            title: '',
+            campaignDetail: '',
             campaigns: [],
+            networks: [
+                { network: 'facebook', name: 'Facebook', icon: 'bx bxl-facebook', color: '#1877f2' },
+                { network: 'linkedin', name: 'LinkedIn', icon: 'bx bxl-linkedin', color: '#007bb5' },
+                { network: 'telegram', name: 'Telegram', icon: 'bx bxl-telegram', color: '#0088cc' },
+                { network: 'twitter', name: 'Twitter', icon: 'bx bxl-twitter', color: '#1da1f2' },
+                { network: 'whatsapp', name: 'Whatsapp', icon: 'bx bxl-whatsapp', color: '#25d366' },
+            ],
         }
-    },
-    methods: {
-        setDataCampaign(data) {
-            //console.log(data)
-            this.campaignDetail = data;
-        },
     },
     watch: {
         '$route.params.slug': {
@@ -91,7 +105,7 @@ export default {
                         slug: this.$route.params.slug
                     }
                 })
-                .then(res => (this.setDataCampaign(res.data.data)))
+                .then(res => (this.campaignDetail = res.data.data, this.title = res.data.data.campaign_name))
                 .catch(err => console.log(err));
             },
         deep: true,

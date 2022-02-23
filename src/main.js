@@ -25,7 +25,7 @@ Vue.use(VueLazyload)
 Vue.use(VueSocialSharing, {
   networks: {
     fakeblock: 'https://fakeblock.com/share?url=@url&title=@title',
-  }
+  },
 })
 
 const options = {
@@ -59,7 +59,7 @@ new Vue({
   router,
 
   components: {
-    App
+    App,
   },
 
   render: h => h(App),

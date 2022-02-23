@@ -10,7 +10,7 @@
                     <li><router-link to="/articles">Artikel</router-link></li>
                 </ol>
                 <h2 class="text-start">{{ articleDetail.title }}</h2>
-                <small class="text-start">Diposting :  {{ articleDetail.created_at | formatDate }} oleh {{ articleDetail.user.name }}</small>
+                <small class="text-start">Diposting :  {{ articleDetail.created_at | formatDate }} oleh {{ name }}</small>
             </div>
         </section>
         <!-- End Breadcrumbs -->
@@ -43,13 +43,13 @@
                             v-for="network in networks"
                             :network="network.network"
                             :key="network.network"
-                            :style="{backgroundColor: network.color}"
-                            :url="'http://pejuangsedekah.id/'+articleDetail.slug"
-                            :title="articleDetail.title"
-                            :description="articleDetail.content"
+                            :url="'http://pejuangsedekah.id/article/'+articleDetail.slug"
+                            :title="title"
+                            :description="articleDetail.title"
+                            class="btn btn-warning m-1"
                         >
                             <i :class="network.icon"></i>
-                            <span>{{ network.name }}</span>
+                            <span class="m-2">{{ network.name }}</span>
                         </ShareNetwork>
                     </div>
                     <RelatedArticle/>
@@ -80,6 +80,7 @@ export default {
         return {
             articleDetail: [],
             name: '',
+            title: '',
             networks: [
                 { network: 'facebook', name: 'Facebook', icon: 'bx bxl-facebook', color: '#1877f2' },
                 { network: 'linkedin', name: 'LinkedIn', icon: 'bx bxl-linkedin', color: '#007bb5' },
@@ -88,12 +89,6 @@ export default {
                 { network: 'whatsapp', name: 'Whatsapp', icon: 'bx bxl-whatsapp', color: '#25d366' },
             ]
         }
-    },
-    methods: {
-        setDataArticle(data) {
-            //console.log(data)
-            this.articleDetail = data;
-        },
     },
     watch: {
         '$route.params.slug': {
@@ -104,7 +99,7 @@ export default {
                         slug: this.$route.params.slug
                     }
                 })
-                .then(res => (this.setDataArticle(res.data.data)))
+                .then(res => (this.articleDetail = res.data.data, this.name = res.data.data.user.name, this.title = res.data.data.title))
                 .catch(err => console.log(err));
             },
         deep: true,
